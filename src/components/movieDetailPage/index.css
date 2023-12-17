@@ -1,0 +1,120 @@
+.movie-bg-cont {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(30, 29, 29);
+}
+.movie-cont {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: sroll;
+  min-height: 100vh;
+  padding-top: 80px;
+  padding: 40px;
+  background-color: rgb(30, 29, 29);
+}
+@media screen and (max-width: 768px) {
+  .movie-cont {
+    margin-top: 30px;
+    padding: 30px;
+  }
+}
+.movie-details-cont {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(1, 1, 23);
+  border-radius: 10px;
+}
+
+.cover-image {
+  width: 50%;
+  align-self: stretch;
+}
+@media screen and (max-width: 768px) {
+  .cover-image {
+    display: none;
+  }
+}
+
+.details-box {
+  padding: 20px;
+}
+
+.img-det-cont {
+  display: flex;
+}
+.all-details-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.movie-title {
+  font-size: 18px;
+  color: aliceblue;
+  margin: 0;
+}
+@media screen and (max-width: 768px) {
+  .movie-title {
+    font-size: 16px;
+    color: aliceblue;
+    margin: 0;
+  }
+}
+.poster {
+  height: 200px;
+  width: 150px;
+  margin-right: 15px;
+}
+@media screen and (max-width: 768px) {
+  .poster {
+    height: 180px;
+    width: 120px;
+    margin-right: 15px;
+  }
+}
+.movie-ratings {
+  color: aqua;
+  font-size: 20px;
+  font-weight: 500;
+}
+@media screen and (max-width: 768px) {
+  .movie-ratings {
+    color: aqua;
+    font-size: 15px;
+    font-weight: 500;
+  }
+}
+.duration {
+  color: aliceblue;
+  font-size: 15px;
+}
+@media screen and (max-width: 768px) {
+  .duration {
+    color: aliceblue;
+    font-size: 13px;
+  }
+}
+.overview {
+  color: aliceblue;
+  font-size: 15px;
+}
+@media screen and (max-width: 768px) {
+  .overview {
+    font-size: 13px;
+  }
+}
+.over-heading {
+  color: aliceblue;
+  font-size: 20px;
+}
+@media screen and (max-width: 768px) {
+  .over-heading {
+    font-size: 14px;
+  }
+}
+.cast-container {
+  display: flex;
+  flex-direction: row;
+}
