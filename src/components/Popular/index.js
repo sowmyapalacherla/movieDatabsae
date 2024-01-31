@@ -99,6 +99,11 @@ function Popular() {
           </li>
         ))}
       </ul>
+      <Link to="/top-rated">
+        <button type="button" className="pagination mr-auto">
+          Top Rated
+        </button>
+      </Link>
     </div>
   )
   const getSwitchedResults = () => {

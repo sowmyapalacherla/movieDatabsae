@@ -25,7 +25,7 @@ function TopRated() {
     const API_KEY = 'c45a857c193f6302f2b5061c3b85e743'
     const apiUrl =
       searchValue === ''
-        ? `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+        ? `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
         : `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${searchValue}&page=1`
     const options = {
       method: 'GET',
