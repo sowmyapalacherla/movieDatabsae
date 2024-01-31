@@ -1,10 +1,7 @@
-import {useState, useEffect, useContext, useCallback} from 'react'
-import {Link} from 'react-router-dom'
+import {Component} from 'react'
 import Loader from 'react-loader-spinner'
-
+import {Link} from 'react-router-dom'
 import Header from '../Header'
-import {SearchContext} from '../../searchContext'
-
 import './index.css'
 
 const apiStatusConstants = {
@@ -14,24 +11,25 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-function Popular() {
-  const [popularMovies, setPopular] = useState([])
-  const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial)
-  const {searchValue} = useContext(SearchContext)
+class Popular extends Component {
+  state = {
+    popularMovies: [],
+    apiStatus: apiStatusConstants.initial,
+  }
 
-  const getMovies = useCallback(async () => {
-    setApiStatus(apiStatusConstants.inProgress)
+  componentDidMount() {
+    this.getPopularMovies()
+  }
+
+  getPopularMovies = async () => {
+    this.setState({apiStatus: apiStatusConstants.inProgress})
 
     const API_KEY = 'c45a857c193f6302f2b5061c3b85e743'
-    const apiUrl =
-      searchValue === ''
-        ? `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
-        : `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${searchValue}&page=1`
+    const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
     const options = {
       method: 'GET',
     }
-
-    const response = await fetch(apiUrl, options)
+    const response = await fetch(url, options)
     if (response.ok) {
       const fetchedData = await response.json()
       const updatedData = fetchedData.results.map(each => ({
@@ -40,30 +38,24 @@ function Popular() {
         title: each.title,
         rating: each.vote_average,
       }))
-      setPopular(updatedData)
-      setApiStatus(apiStatusConstants.success)
+      console.log(fetchedData)
+      this.setState({
+        popularMovies: updatedData,
+        apiStatus: apiStatusConstants.success,
+      })
     } else {
-      setApiStatus(apiStatusConstants.failure)
+      this.setState({apiStatus: apiStatusConstants.failure})
     }
-  }, [searchValue])
+  }
 
-  useEffect(() => {
-    getMovies()
-  }, [searchValue, getMovies])
-
-  const renderLoadingView = () => (
+  renderLoadingView = () => (
     <div className="products-loader-container">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
 
-  const renderFailureView = () => (
+  renderFailureView = () => (
     <div className="products-error-view-container">
-      <img
-        src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-error-view.png"
-        alt="all-products-error"
-        className="products-failure-img"
-      />
       <h1 className="product-failure-heading-text">
         Oops! Something Went Wrong
       </h1>
@@ -73,58 +65,59 @@ function Popular() {
     </div>
   )
 
-  const renderPopularMoviesView = () => (
-    <div className="container">
-      <h1 className="heading">Popular</h1>
+  renderPopularMovies = () => {
+    const {popularMovies} = this.state
+    return (
+      <div className="container">
+        <h1 className="heading">Popular</h1>
+        <ul className="home-container">
+          {popularMovies.map(each => (
+            <li className="list" key={each.id}>
+              <img
+                src={`https://image.tmdb.org/t/p/w500${each.imgUrl}`}
+                alt="movieImage"
+                className="movie-image"
+              />
+              <p className="title">{each.title}</p>
+              <p className="rating">Rating {each.rating}</p>
+              <Link
+                key={each.id}
+                className="link-element"
+                to={`/movie/${each.id}`}
+              >
+                <button type="button" className="view-details">
+                  View Details
+                </button>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 
-      <ul className="home-container">
-        {popularMovies.map(each => (
-          <li className="list" key={each.id}>
-            <img
-              src={`https://image.tmdb.org/t/p/w500${each.imgUrl}`}
-              alt="movieImage"
-              className="movie-image"
-            />
-            <p className="title">{each.title}</p>
-            <p className="rating">Rating {each.rating}</p>
-            <Link
-              key={each.id}
-              className="link-element"
-              to={`/movie/${each.id}`}
-            >
-              <button type="button" className="view-details">
-                View Details
-              </button>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <Link to="/top-rated">
-        <button type="button" className="pagination mr-auto">
-          Top Rated
-        </button>
-      </Link>
-    </div>
-  )
-  const getSwitchedResults = () => {
+  renderMovies = () => {
+    const {apiStatus} = this.state
+
     switch (apiStatus) {
-      case apiStatusConstants.inProgress:
-        return renderLoadingView()
       case apiStatusConstants.success:
-        return renderPopularMoviesView()
+        return this.renderPopularMovies()
       case apiStatusConstants.failure:
-        return renderFailureView()
+        return this.renderFailureView()
+      case apiStatusConstants.inProgress:
+        return this.renderLoadingView()
       default:
         return null
     }
   }
 
-  return (
-    <div className="bg-home-container">
-      <Header />
-      {getSwitchedResults()}
-    </div>
-  )
+  render() {
+    return (
+      <div className="bg-home-container">
+        <Header />
+        {this.renderMovies()}
+      </div>
+    )
+  }
 }
-
 export default Popular
